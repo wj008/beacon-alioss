@@ -6,7 +6,6 @@ Yee.define('oss', ['a', 'input'], function (elem) {
     let webUrl = qel.data('web-url') || '';
     webUrl = webUrl.replace(/\/+$/, '');
     let convert = qel.data('convert') || false;
-    console.log("convert",convert);
     //上传之前
     qel.on('uploadBefore', function (ev, bindData, files) {
         return new Promise(function (resolve, reject) {
