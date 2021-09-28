@@ -15,7 +15,7 @@ class OssFile extends Field
     /**
      * @var bool 开启文档转换
      */
-    public bool $convert = true;
+    public bool $convert = false;
 
     public function setting(array $args)
     {
