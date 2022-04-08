@@ -40,6 +40,8 @@ class Aliyun extends Controller
         $bucket = Config::get('aliyun.oss_bucket', '');
         $project = Config::get('aliyun.imm_project', '');
         $regionId = Config::get('aliyun.imm_region_id', '');
+        $host = 'imm.' . $regionId . '.aliyuncs.com';
+        $host = Config::get('aliyun.imm_host', $host);
         $webUrl = Config::get('aliyun.oss_web_url', '');
         AlibabaCloud::accessKeyClient($access_id, $access_key)->regionId($regionId)->asDefaultClient();
         try {
@@ -49,7 +51,7 @@ class Aliyun extends Controller
                 ->version('2017-09-06')
                 ->action('GetOfficeConversionTask')
                 ->method('POST')
-                ->host('imm.cn-beijing.aliyuncs.com')
+                ->host($host)
                 ->options([
                     'query' => [
                         'RegionId' => $regionId,
