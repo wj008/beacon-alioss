@@ -90,10 +90,10 @@ class Aliyun extends Controller
                 $this->success('ok', ['finish' => true, 'document' => $doc]);
             }
         } catch (ClientException $e) {
-            Logger::error($e->getErrorMessage());
+            Logger::error($e);
             $this->error('转换失败,请检查文件是否损坏.');
         } catch (ServerException $e) {
-            Logger::error($e->getErrorMessage());
+            Logger::error($e);
             $this->error('转换失败,请检查文件是否损坏.');
         }
     }
@@ -149,10 +149,10 @@ class Aliyun extends Controller
             }
             Logger::log($data);
         } catch (ClientException $e) {
-            Logger::error($e->getErrorMessage());
+            Logger::error($e);
             $this->error('转换失败,请检查文件是否损坏.');
         } catch (ServerException $e) {
-            Logger::error($e->getErrorMessage());
+            Logger::error($e);
             $this->error('转换失败,请检查文件是否损坏.');
         }
     }
