@@ -10,6 +10,7 @@ use beacon\core\Config;
 use beacon\core\Controller;
 use beacon\core\Method;
 use beacon\core\Util;
+use beacon\core\Logger;
 
 class Aliyun extends Controller
 {
@@ -40,6 +41,8 @@ class Aliyun extends Controller
         $bucket = Config::get('aliyun.oss_bucket', '');
         $project = Config::get('aliyun.imm_project', '');
         $regionId = Config::get('aliyun.imm_region_id', '');
+        $host = 'imm.' . $regionId . '.aliyuncs.com';
+        $host = Config::get('aliyun.imm_host', $host);
         $webUrl = Config::get('aliyun.oss_web_url', '');
         AlibabaCloud::accessKeyClient($access_id, $access_key)->regionId($regionId)->asDefaultClient();
         try {
@@ -49,7 +52,7 @@ class Aliyun extends Controller
                 ->version('2017-09-06')
                 ->action('GetOfficeConversionTask')
                 ->method('POST')
-                ->host('imm.cn-beijing.aliyuncs.com')
+                ->host($host)
                 ->options([
                     'query' => [
                         'RegionId' => $regionId,
@@ -87,10 +90,10 @@ class Aliyun extends Controller
                 $this->success('ok', ['finish' => true, 'document' => $doc]);
             }
         } catch (ClientException $e) {
-            Logger::error($e->getErrorMessage());
+            Logger::error($e);
             $this->error('转换失败,请检查文件是否损坏.');
         } catch (ServerException $e) {
-            Logger::error($e->getErrorMessage());
+            Logger::error($e);
             $this->error('转换失败,请检查文件是否损坏.');
         }
     }
@@ -107,10 +110,11 @@ class Aliyun extends Controller
         $access_id = Config::get('aliyun.access_id', '');
         $access_key = Config::get('aliyun.access_key', '');
         $bucket = Config::get('aliyun.oss_bucket', '');
-
         $project = Config::get('aliyun.imm_project', '');
         $regionId = Config::get('aliyun.imm_region_id', '');
-
+        $host = 'imm.' . $regionId . '.aliyuncs.com';
+        $host = Config::get('aliyun.imm_host', $host);
+        //资源源数据地址
         $srcUri = 'oss://' . $bucket . '/' . $file;
         //重新命名，保护原文件
         $tgtUri = 'oss://' . $bucket . '/document/' . Util::randWord(20);
@@ -125,7 +129,7 @@ class Aliyun extends Controller
                 ->version('2017-09-06')
                 ->action('CreateOfficeConversionTask')
                 ->method('POST')
-                ->host('imm.cn-beijing.aliyuncs.com')
+                ->host($host)
                 ->options([
                     'query' => [
                         'RegionId' => $regionId,
@@ -145,10 +149,10 @@ class Aliyun extends Controller
             }
             Logger::log($data);
         } catch (ClientException $e) {
-            Logger::error($e->getErrorMessage());
+            Logger::error($e);
             $this->error('转换失败,请检查文件是否损坏.');
         } catch (ServerException $e) {
-            Logger::error($e->getErrorMessage());
+            Logger::error($e);
             $this->error('转换失败,请检查文件是否损坏.');
         }
     }
